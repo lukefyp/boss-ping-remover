@@ -68,7 +68,7 @@ class BossPingRemover{
 			
 			var source = e.source.toString();
 			if(this.mobsInArea[source] !== undefined){
-                let skill = e.skill.toString();
+                let skill = parseInt('0x' + e.skill.toString(16).slice(-4));
 				var length = 0;
 				for(var obj of e.movement){
 					length += obj['duration'];
