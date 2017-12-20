@@ -56,6 +56,10 @@ class BossPingRemover{
 			}
 		});
 		
+		dispatch.hook('S_LOGIN', 9, e=>{
+			this.gameId = e.gameId;
+		});
+		
 		dispatch.hook('S_DESPAWN_NPC', 1, e=>{
 			var source = e.target.toString();
 			if(this.mobsInArea[source] !== undefined){
@@ -64,7 +68,7 @@ class BossPingRemover{
 		});
 		
 		dispatch.hook('S_ACTION_STAGE', 1, e=>{
-			if(!this.enabled || e.skill === undefined) return;
+			if(!this.enabled || e.skill === undefined || this.gameId.equals(e.source)) return;
 			
 			var source = e.source.toString();
 			if(this.mobsInArea[source] !== undefined){
