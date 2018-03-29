@@ -33,6 +33,10 @@ module.exports = function getBossSkills(dispatch) {
         }
     })
     
+    this.destructor = () => {
+        if (config.enabled) writeCache(cache)
+    }
+    
     // async write for performance
     function writeCache(cache) {
         clean(cache)
@@ -175,8 +179,10 @@ module.exports = function getBossSkills(dispatch) {
         }
     })
 
+    /*
     // S_EXIT
     dispatch.hook('S_EXIT', 'raw', {order: -999, filter: {fake: null}}, () => {
         if (config.enabled) writeCache(cache)
     })
+    */
 }
