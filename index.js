@@ -33,6 +33,7 @@ module.exports = function getBossSkills(dispatch) {
         }
     })
     
+    // write cache on disconnect
     this.destructor = () => {
         if (config.enabled) writeCache(cache)
     }
@@ -47,7 +48,7 @@ module.exports = function getBossSkills(dispatch) {
                 fs.writeFile(path.join(__dirname, 'data', `${huntingZoneId}.json`), JSON.stringify(cache[huntingZoneId], null, '\t'), (err) => {
                     writing.splice(writing.indexOf(huntingZoneId), 1)
                     if (err) return
-                    if (config.debug) console.log(`data/${huntingZoneId}.json written`)
+                    if (config.debug) console.log(`[${Date.now().toString().slice(-4)}] "${huntingZoneId}.json" written to "data"`)
                 })
             }
         }
@@ -77,7 +78,7 @@ module.exports = function getBossSkills(dispatch) {
                     reading.splice(reading.indexOf(huntingZoneId), 1)
                     if (err) return
                     Object.assign(cache[huntingZoneId], JSON.parse(data))
-                    if (config.debug) console.log(`data/${huntingZoneId}.json read`)
+                    if (config.debug) console.log(`[${Date.now().toString().slice(-4)}] "${huntingZoneId}.json" read from "data"`)
                 })
             }
             // if being written, try again later
@@ -153,12 +154,12 @@ module.exports = function getBossSkills(dispatch) {
             let length = cache[huntingZoneId][templateId][skill]
             if (length > 0) {
                 // shorten by ping
-                if (config.debug) console.log(`[${Date.now().toString().slice(-4)}] <* sActionStage ${huntingZoneId} ${templateId} ${skill}` 
-                    + `s${event.stage} bpr${Math.min(ping.avg,Math.floor(length/event.speed-1000/config.minCombatFPS))}`)
+                if (config.debug) console.log(`[${Date.now().toString().slice(-4)}] <* sActionStage ${huntingZoneId}-${templateId}-${skill}` 
+                    + ` s${event.stage} d${Math.floor(length)} bpr${Math.floor(Math.min(ping.avg, length/event.speed-1000/config.minCombatFPS))}`)
                 event.speed = event.speed * length / Math.max(length - ping.avg * event.speed, 1000/config.minCombatFPS)
                 return true
             }
-            if (config.debug) console.log(`[${Date.now().toString().slice(-4)}] <- sActionStage ${huntingZoneId} ${templateId} ${skill} s${event.stage}`)
+            if (config.debug) console.log(`[${Date.now().toString().slice(-4)}] <- sActionStage ${huntingZoneId}-${templateId}-${skill} s${event.stage} d0 bpr0`)
         }
     })
 
@@ -171,18 +172,11 @@ module.exports = function getBossSkills(dispatch) {
         if (huntingZoneId && currentActions[mobId] && currentActions[mobId].id == event.id) {
             let time = (Date.now() - currentActions[mobId].time) / currentActions[mobId].speed
             delete currentActions[mobId]
-            if (config.debug) console.log(`[${Date.now().toString().slice(-4)}] <- sActionEnd ${huntingZoneId} ${templateId} ${skill} t${event.type} ${time}ms`)
+            if (config.debug) console.log(`[${Date.now().toString().slice(-4)}] <- sActionEnd ${huntingZoneId}-${templateId}-${skill} t${event.type} d${time}`)
             if (event.type == 0) {
                 if (!cache[huntingZoneId][templateId]) cache[huntingZoneId][templateId] = {}
                 cache[huntingZoneId][templateId][skill] = cache[huntingZoneId][templateId][skill] ? (cache[huntingZoneId][templateId][skill] + time) / 2 : time
             }
         }
     })
-
-    /*
-    // S_EXIT
-    dispatch.hook('S_EXIT', 'raw', {order: -999, filter: {fake: null}}, () => {
-        if (config.enabled) writeCache(cache)
-    })
-    */
 }
