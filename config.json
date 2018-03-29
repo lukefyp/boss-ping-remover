@@ -1,0 +1,10 @@
+{
+    "version": "2.0",
+    "enabled": true,
+    "debug": false,
+    "pingHistoryMax": 30,
+    "pingSpikesLimit": false,
+    "pingSpikesMin": 100,
+    "pingSpikesMax": 1000,
+    "minCombatFPS": 30
+}

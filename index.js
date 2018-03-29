@@ -1,98 +1,182 @@
-// Set this to your lowest ping -- If you don't have ping-remover
-const MY_MIN_PING = 60;
-// Setting this above 1.0 will make the boss faster, or under for slower
-const SPECIAL_LENGTH_MULTIPLIER = 1.0;
+const fs = require('fs'),
+    path = require('path'),
+    Ping = require('./ping.js'),
+    Command = require('command')
 
-const Command = require('command');
+module.exports = function getBossSkills(dispatch) {
+    // constants
+    const ping = Ping(dispatch),
+        command = Command(dispatch)
+        config = require('./config.json')
 
-try{
-	var Ping = require('ping');
-}catch(e){}
+    // variables
+    let zone = -1,
+        mobs = {},
+        cache = {},
+        currentActions = {},
+        reading = [],
+        writing = []
 
-class PingClass{
-	constructor(){
-		function getPing(){
-			return MY_MIN_PING;
-		}
-		this.getPing = getPing;
-	}
+    // commands
+    command.add('bpr', (arg) => {
+        if (arg && arg.toLowerCase() == 'debug') config.debug = !config.debug
+        else {
+            config.enabled = !config.enabled
+            command.message(`Boss Ping Remover ${config.enabled ? 'enabled' : 'disabled'}.`)
+            if (!config.enabled) {
+                writeCache(cache)
+                zone = -1
+                cache = {}
+                mobs = {}
+                currentActions = {}
+            }
+        }
+    })
+    
+    // write cache on disconnect
+    this.destructor = () => {
+        if (config.enabled) writeCache(cache)
+    }
+    
+    // async write for performance
+    function writeCache(cache) {
+        clean(cache)
+        for (let huntingZoneId in cache) {
+            // if being written, don't retry
+            if (!writing.includes(huntingZoneId)) {
+                writing.push(huntingZoneId)
+                fs.writeFile(path.join(__dirname, 'data', `${huntingZoneId}.json`), JSON.stringify(cache[huntingZoneId], null, '\t'), (err) => {
+                    writing.splice(writing.indexOf(huntingZoneId), 1)
+                    if (err) return
+                    if (config.debug) console.log(`[${Date.now().toString().slice(-4)}] "${huntingZoneId}.json" written to "data"`)
+                })
+            }
+        }
+    }
+
+    // delete empty objects inside an object
+    function clean(obj) {
+        for (let key in obj) {
+            if (obj[key] && typeof obj[key] === "object") {
+                if (Object.keys(obj[key]).length === 0) {
+                    delete obj[key]
+                }
+                else {
+                    clean(obj[key])
+                }
+            }
+        }
+    }
+
+    // async read for performance
+    function readData(huntingZoneId) {
+        // if being read, don't retry
+        if (!reading.includes(huntingZoneId)) {
+            if (!writing.includes(huntingZoneId)) {
+                reading.push(huntingZoneId)
+                fs.readFile(path.join(__dirname, 'data', `${huntingZoneId}.json`), 'utf8', (err, data) => {
+                    reading.splice(reading.indexOf(huntingZoneId), 1)
+                    if (err) return
+                    Object.assign(cache[huntingZoneId], JSON.parse(data))
+                    if (config.debug) console.log(`[${Date.now().toString().slice(-4)}] "${huntingZoneId}.json" read from "data"`)
+                })
+            }
+            // if being written, try again later
+            else {
+                setTimeout(readData, 500, huntingZoneId)
+            }
+        }
+    }
+
+    // S_SPAWN_NPC
+    dispatch.hook('S_SPAWN_NPC', 6, {filter: {fake: null}}, event => {
+        if (config.enabled) {
+            let mobId = JSON.stringify(event.gameId),
+                huntingZoneId = event.huntingZoneId,
+                templateId = event.templateId
+            mobs[mobId] = huntingZoneId
+            // if not cached, try to read from data folder
+            if (!cache[huntingZoneId]) {
+                cache[huntingZoneId] = {}
+                readData(huntingZoneId)
+            }
+            if (!cache[huntingZoneId][templateId]) cache[huntingZoneId][templateId] = {}
+        }
+    })
+
+    // S_DESPAWN_NPC
+    dispatch.hook('S_DESPAWN_NPC', 3, {filter: {fake: null}}, event => {
+        if (config.enabled) {
+            let mobId = JSON.stringify(event.gameId)
+            if (mobs[mobId]) delete mobs[mobId]
+            if (currentActions[mobId]) delete currentActions[mobId]
+        }
+    })
+
+    // S_LOAD_TOPO
+    dispatch.hook('S_LOAD_TOPO', 3, event => {
+        if (config.enabled) {
+            if (zone != event.zone) {
+                writeCache(cache)
+                cache = {}
+            }
+            zone = event.zone
+            mobs = {}
+            currentActions = {}
+        }
+    })
+
+    // S_ACTION_STAGE
+    dispatch.hook('S_ACTION_STAGE', 4, event => {
+        let mobId = JSON.stringify(event.gameId),
+            huntingZoneId = mobs[mobId],
+            templateId = event.templateId,
+            skill = parseInt('0x' + event.skill.toString(16).slice(-4))
+        if (huntingZoneId) {
+            // if multi stage, do not update start time
+            if (currentActions[mobId] && event.id == currentActions[mobId].id && event.stage > currentActions[mobId].stage) {
+                currentActions[mobId] = {
+                    time: currentActions[mobId].time,
+                    speed: event.speed,
+                    stage: event.stage,
+                    id: event.id
+                }
+            }
+            else {
+                currentActions[mobId] = {
+                    time: Date.now(),
+                    speed: event.speed,
+                    stage: event.stage,
+                    id: event.id
+                }
+            }
+            if (!cache[huntingZoneId][templateId]) cache[huntingZoneId][templateId] = {}
+            let length = cache[huntingZoneId][templateId][skill]
+            if (length > 0) {
+                // shorten by ping
+                if (config.debug) console.log(`[${Date.now().toString().slice(-4)}] <* sActionStage ${huntingZoneId}-${templateId}-${skill}` 
+                    + ` s${event.stage} d${Math.floor(length)} bpr${Math.floor(Math.min(ping.avg, length/event.speed-1000/config.minCombatFPS))}`)
+                event.speed = event.speed * length / Math.max(length - ping.avg * event.speed, 1000/config.minCombatFPS)
+                return true
+            }
+            if (config.debug) console.log(`[${Date.now().toString().slice(-4)}] <- sActionStage ${huntingZoneId}-${templateId}-${skill} s${event.stage} d0 bpr0`)
+        }
+    })
+
+    // S_ACTION_END
+    dispatch.hook('S_ACTION_END', 3, event => {
+        let mobId = JSON.stringify(event.gameId),
+            huntingZoneId = mobs[mobId],
+            templateId = event.templateId,
+            skill = parseInt('0x' + event.skill.toString(16).slice(-4))
+        if (huntingZoneId && currentActions[mobId] && currentActions[mobId].id == event.id) {
+            let time = (Date.now() - currentActions[mobId].time) / currentActions[mobId].speed
+            delete currentActions[mobId]
+            if (config.debug) console.log(`[${Date.now().toString().slice(-4)}] <- sActionEnd ${huntingZoneId}-${templateId}-${skill} t${event.type} d${time}`)
+            if (event.type == 0) {
+                if (!cache[huntingZoneId][templateId]) cache[huntingZoneId][templateId] = {}
+                cache[huntingZoneId][templateId][skill] = cache[huntingZoneId][templateId][skill] ? (cache[huntingZoneId][templateId][skill] + time) / 2 : time
+            }
+        }
+    })
 }
-
-class BossPingRemover{
-	constructor(dispatch){
-		try{
-			this.ping = Ping(dispatch);
-		}catch(e){
-			this.ping = new PingClass();
-		}
-		this.zone = -1;
-		this.enabled = true;
-		this.command = Command(dispatch);
-		
-		this.command.add('bpr', ()=>{
-			this.enabled = !this.enabled;
-			this.command.message("Boss ping remover has been " + (this.enabled?"enabled.":"disabled."));
-		});
-		
-		dispatch.hook('S_LOAD_TOPO', 1, e=>{
-			if(e.zone != this.zone){
-				this.cache = {};
-			}
-			this.mobsInArea = {};
-			this.zone = e.zone;
-		});
-		
-		dispatch.hook('S_SPAWN_NPC', 4, e=>{
-			if(this.cache[e.huntingZoneId] === undefined){
-				try{
-					this.cache[e.huntingZoneId] = require('./bosses/' + e.huntingZoneId.toString() + ".json");
-				}catch(e){}
-			}
-			if(this.cache[e.huntingZoneId] !== undefined){
-				this.mobsInArea[e.id.toString()] = {
-					"id": e.templateId.toString(),
-					"zone": e.huntingZoneId,
-				};
-			}
-		});
-		
-		dispatch.hook('S_LOGIN', 9, e=>{
-			this.gameId = e.gameId;
-		});
-		
-		dispatch.hook('S_DESPAWN_NPC', 1, e=>{
-			var source = e.target.toString();
-			if(this.mobsInArea[source] !== undefined){
-				delete this.mobsInArea[source];
-			}
-		});
-		
-		dispatch.hook('S_ACTION_STAGE', 1, e=>{
-			if(!this.enabled || e.skill === undefined || this.gameId.equals(e.source)) return;
-			
-			var source = e.source.toString();
-			if(this.mobsInArea[source] !== undefined){
-                let skill = parseInt('0x' + e.skill.toString(16).slice(-4));
-				var length = 0;
-				for(var obj of e.movement){
-					length += obj['duration'];
-				}
-				if(length == 0){
-					try{
-						length = this.cache[this.mobsInArea[source]['zone']][this.mobsInArea[source]['id']][skill];
-					}catch(e){
-						//console.log("[BPR]", this.mobsInArea[source], skill);
-						return;
-					}
-				}
-				var newSpeed = ((length * SPECIAL_LENGTH_MULTIPLIER) / (length - this.ping.getPing())) * e.speed;
-				if(newSpeed > e.speed)
-					e.speed = newSpeed;
-				return true;
-			}
-		});
-	}
-	
-}
-
-module.exports = BossPingRemover;
