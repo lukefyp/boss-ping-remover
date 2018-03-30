@@ -19,7 +19,10 @@ module.exports = function getBossSkills(dispatch) {
 
     // commands
     command.add('bpr', (arg) => {
-        if (arg && arg.toLowerCase() == 'debug') config.debug = !config.debug
+        if (arg && arg.toLowerCase() == 'debug') {
+            config.debug = !config.debug
+            command.message(`Boss Ping Remover debug ${config.debug ? 'enabled' : 'disabled'}.`)
+        }
         else {
             config.enabled = !config.enabled
             command.message(`Boss Ping Remover ${config.enabled ? 'enabled' : 'disabled'}.`)
