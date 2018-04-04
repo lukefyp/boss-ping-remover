@@ -46,7 +46,7 @@ module.exports = function getBossSkills(dispatch) {
         clean(cache)
         for (let huntingZoneId in cache) {
             // if being written, don't retry
-            if (!writing.includes(huntingZoneId)) {
+            if (!writing.includes(huntingZoneId) && cache[huntingZoneId] && Object.keys(cache[huntingZoneId]).length > 0) {
                 writing.push(huntingZoneId)
                 fs.writeFile(path.join(__dirname, 'data', `${huntingZoneId}.json`), JSON.stringify(cache[huntingZoneId], null, '\t'), (err) => {
                     writing.splice(writing.indexOf(huntingZoneId), 1)
