@@ -6,16 +6,16 @@ const fs = require('fs'),
 module.exports = function getBossSkills(dispatch) {
     // constants
     const ping = Ping(dispatch),
-        command = Command(dispatch)
-        config = require('./config.json')
+        command = Command(dispatch),
+        config = require('./config.json'),
+        data = require('./data.json')
 
     // variables
     let zone = -1,
         mobs = {},
         cache = {},
         currentActions = {},
-        reading = [],
-        writing = []
+        writing = false
 
     // commands
     command.add('bpr', (arg) => {
@@ -44,16 +44,15 @@ module.exports = function getBossSkills(dispatch) {
     // async write for performance
     function writeCache(cache) {
         clean(cache)
-        for (let huntingZoneId in cache) {
-            // if being written, don't retry
-            if (!writing.includes(huntingZoneId) && cache[huntingZoneId] && Object.keys(cache[huntingZoneId]).length > 0) {
-                writing.push(huntingZoneId)
-                fs.writeFile(path.join(__dirname, 'data', `${huntingZoneId}.json`), JSON.stringify(cache[huntingZoneId], null, '\t'), (err) => {
-                    writing.splice(writing.indexOf(huntingZoneId), 1)
-                    if (err) return
-                    if (config.debug) console.log(`[${Date.now().toString().slice(-4)}] "${huntingZoneId}.json" written to "data"`)
-                })
-            }
+        Object.assign(data, cache)
+        // if being written, don't retry
+        if (!writing) {
+            writing = true
+            fs.writeFile(path.join(__dirname, 'data.json'), JSON.stringify(data, null, '\t'), (err) => {
+                writing = false
+                if (err) return
+                if (config.debug) console.log(`[${Date.now().toString().slice(-4)}] "data.json" written`)
+            })
         }
     }
 
@@ -61,32 +60,12 @@ module.exports = function getBossSkills(dispatch) {
     function clean(obj) {
         for (let key in obj) {
             if (obj[key] && typeof obj[key] === "object") {
+                if (Object.keys(obj[key]).length !== 0) {
+                    clean(obj[key])
+                }
                 if (Object.keys(obj[key]).length === 0) {
                     delete obj[key]
                 }
-                else {
-                    clean(obj[key])
-                }
-            }
-        }
-    }
-
-    // async read for performance
-    function readData(huntingZoneId) {
-        // if being read, don't retry
-        if (!reading.includes(huntingZoneId)) {
-            if (!writing.includes(huntingZoneId)) {
-                reading.push(huntingZoneId)
-                fs.readFile(path.join(__dirname, 'data', `${huntingZoneId}.json`), 'utf8', (err, data) => {
-                    reading.splice(reading.indexOf(huntingZoneId), 1)
-                    if (err) return
-                    Object.assign(cache[huntingZoneId], JSON.parse(data))
-                    if (config.debug) console.log(`[${Date.now().toString().slice(-4)}] "${huntingZoneId}.json" read from "data"`)
-                })
-            }
-            // if being written, try again later
-            else {
-                setTimeout(readData, 500, huntingZoneId)
             }
         }
     }
@@ -98,10 +77,10 @@ module.exports = function getBossSkills(dispatch) {
                 huntingZoneId = event.huntingZoneId,
                 templateId = event.templateId
             mobs[mobId] = huntingZoneId
-            // if not cached, try to read from data folder
+            // if not cached, try to read from data
             if (!cache[huntingZoneId]) {
-                cache[huntingZoneId] = {}
-                readData(huntingZoneId)
+                if (data[huntingZoneId]) cache[huntingZoneId] = data[huntingZoneId]
+                else cache[huntingZoneId] = {}
             }
             if (!cache[huntingZoneId][templateId]) cache[huntingZoneId][templateId] = {}
         }
