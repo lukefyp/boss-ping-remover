@@ -1,0 +1,13 @@
+{
+  "files": {
+    "bpr.js": "8fde41373ec4cca7ec8ab32e31c7b3cc09207640c16a60cd9dba4c38bf15a4fa",
+    "config.json": "f26b56df5f946cd7fbd1da428937bf3cdbcb3442d34596c5e7abecb44390960a",
+    "data.json": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "index.js": "a4fd0f891f84b7b9505322b6847b17be7b9b6d3e319f673f57d9a975a1bccb69",
+    "manifest.json": "bafc5e995a8c96edf75ba8440ef4e68e038f7b0507bc27a910042c7b4581331a",
+    "module.json": "3afb8b7a9f98a56d687f31825ad8ffa96500008fda66c841ee7cffb06a3594ab",
+    "Newtonsoft.Json.dll": "564e6201dbf6354460d9ca180f0752d50dd7496fff49e05f67a9af42a2e772c7",
+    "ping.js": "6fd1b7dcf731261b6bba223911f29ebe626ecb9319723c53677eeb72ca668f74",
+    "README.md": "fd4c4f767ca846697a96d3f05d5ad182e01f22f3f68ee9d0e9adfab926355208"
+  }
+}

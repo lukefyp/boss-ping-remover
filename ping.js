@@ -55,14 +55,14 @@ class Ping {
       return ((id > 0x4000000) ? id - 0x4000000 : id);
     };
     
-    dispatch.hook('S_LOGIN', 9, e => { ({gameId} = e); });
+    dispatch.hook('S_LOGIN', dispatch.base.majorPatchVersion >= 67 ? 10 : 9, e => {gameId = e.gameId});
 
     const skillHook = e => {
       pingStart(skillId(e.skill));
     };
 
     for(let packet of [
-      ['C_START_SKILL', 4],
+      ['C_START_SKILL', dispatch.base.majorPatchVersion >= 67 ? 5 : 4],
       ['C_START_TARGETED_SKILL', 4],
       ['C_START_COMBO_INSTANT_SKILL', 2],
       ['C_START_INSTANCE_SKILL', 3],
@@ -89,7 +89,7 @@ class Ping {
       //['S_INSTANT_MOVE', 3], //not sure about this, often delayed extra 25ms
     ]) dispatch.hook(packet[0], packet[1], { filter: { fake: false, modified: false, silenced: null }, order: -1000 }, actionHook);
 
-    dispatch.hook('C_REQUEST_GAMESTAT_PING', 1, () => {
+    dispatch.hook('C_REQUEST_GAMESTAT_PING', 'raw', () => {
       setTimeout(() => { dispatch.toClient('S_RESPONSE_GAMESTAT_PONG', 1); }, this.last);
       return false;
     });
