@@ -4,14 +4,14 @@
     "module.json": "3afb8b7a9f98a56d687f31825ad8ffa96500008fda66c841ee7cffb06a3594ab",
     "README.md": "fd4c4f767ca846697a96d3f05d5ad182e01f22f3f68ee9d0e9adfab926355208",
     "config/config.json": {
-        "hash": "f3a8dc83be12d3724ecaac0543806fb7848d95886194f11e965c63f12470ecd6",
+        "hash": "f26b56df5f946cd7fbd1da428937bf3cdbcb3442d34596c5e7abecb44390960a",
         "overwrite": false
     },
     "config/data.json": {
-        "hash": "64af9631c44d757c140871407af67e11b258913e388290699daa4ff96686642e",
+        "hash": "d27ae4e35747a2341f6edfbd9bb255613690213bfb61c258767b73a9aa9fe06e",
         "overwrite": false
     },
-    "lib/bpr.js": "212840d6cda62ca3cc3df7750edb7609c24893b62d91dae0b48bcf67a7baea18",
+    "lib/bpr.js": "73bc00a5d148bbdeba3b7a1368fc3e102c6f40afb3c13ec4d65921c43ba3f310",
     "lib/ping.js": "3f866ba0bc4e77788055179aef680fb9c4675f06d1ecb545b789ff57585848bd"
   },
   "defs": {
