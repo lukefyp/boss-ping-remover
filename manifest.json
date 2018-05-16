@@ -8,10 +8,10 @@
 			"overwrite": false
 		},
 		"config/data.json": {
-			"hash": "38b539a1d3a185929e931330c55b720c45e5b91d04da590961ee85e53da42809",
+			"hash": "a5cac822b5984bd4f7b4d72f17a2b0f5c0a30ecbfa3aa21da8c82ba0779ae602",
 			"overwrite": false
 		},
-		"lib/bpr.js": "73bc00a5d148bbdeba3b7a1368fc3e102c6f40afb3c13ec4d65921c43ba3f310",
+		"lib/bpr.js": "fb5dc3a6853f98616966e828ab4a7a5e52d5e27cd0eb556cb3ac63d1ec19ef81",
 		"lib/ping.js": "25034f94cb809b50c73554148b069d42da03da0e28465db8ad117a83e0586410"
 	},
 	"defs": {
@@ -31,6 +31,6 @@
 		"S_LOAD_TOPO": 3,
 		"S_LOGIN": 10,
 		"S_RESPONSE_GAMESTAT_PONG": 1,
-		"S_SPAWN_NPC": 6
+		"S_SPAWN_NPC": 8
 	}
 }
