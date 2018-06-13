@@ -8,10 +8,10 @@
 			"overwrite": false
 		},
 		"config/data.json": {
-			"hash": "a5cac822b5984bd4f7b4d72f17a2b0f5c0a30ecbfa3aa21da8c82ba0779ae602",
+			"hash": "4a6729c700f132875e9657e2f4c26319944b6722d5d6b41919e739de98b123b2",
 			"overwrite": false
 		},
-		"lib/bpr.js": "939e2361e10605e0dcc5a830c6ef2493152567ced759de4e6010f67bf4c106d9",
+		"lib/bpr.js": "5185c95a2975a63ab3b31e871ae8fe8de9fa9f4ebe58986e1318856e8b5d381e",
 		"lib/ping.js": "6fffb4e7442e94d23c9b6c4c40e1aa3e1768c99831468ac97d1696b0aed74579",
 		"README.url": "0a28730036ca6f1d175fc6e7e8d706f07f086995e3080f98037d251ae4475d56"
 	},
