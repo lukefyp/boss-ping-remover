@@ -11,8 +11,9 @@
 			"hash": "a5cac822b5984bd4f7b4d72f17a2b0f5c0a30ecbfa3aa21da8c82ba0779ae602",
 			"overwrite": false
 		},
-		"lib/bpr.js": "fb5dc3a6853f98616966e828ab4a7a5e52d5e27cd0eb556cb3ac63d1ec19ef81",
-		"lib/ping.js": "25034f94cb809b50c73554148b069d42da03da0e28465db8ad117a83e0586410"
+		"lib/bpr.js": "939e2361e10605e0dcc5a830c6ef2493152567ced759de4e6010f67bf4c106d9",
+		"lib/ping.js": "6fffb4e7442e94d23c9b6c4c40e1aa3e1768c99831468ac97d1696b0aed74579",
+		"README.url": "0a28730036ca6f1d175fc6e7e8d706f07f086995e3080f98037d251ae4475d56"
 	},
 	"defs": {
 		"C_CANCEL_SKILL": 1,
@@ -24,13 +25,12 @@
 		"C_START_SKILL": 5,
 		"C_START_TARGETED_SKILL": 4,
 		"S_ACTION_END": 3,
-		"S_ACTION_STAGE": 4,
+		"S_ACTION_STAGE": 5,
 		"S_CANNOT_START_SKILL": 1,
 		"S_CAN_LOCKON_TARGET": 1,
 		"S_DESPAWN_NPC": 3,
 		"S_LOAD_TOPO": 3,
 		"S_LOGIN": 10,
-		"S_RESPONSE_GAMESTAT_PONG": 1,
 		"S_SPAWN_NPC": 8
 	}
 }
