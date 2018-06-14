@@ -1,10 +1,10 @@
 {
 	"files": {
-		"index.js": "ae370e1d9984e061fda8640d46c13a03549c66778cebb3dc1bb7722d94e27f2b",
-		"module.json": "3afb8b7a9f98a56d687f31825ad8ffa96500008fda66c841ee7cffb06a3594ab",
-		"README.md": "fd4c4f767ca846697a96d3f05d5ad182e01f22f3f68ee9d0e9adfab926355208",
+		"index.js": "51d6c93eb6c62ca3846e421b8da6897462966529c4db12dd43e89ef1ac311144",
+		"module.json": "ad933490f2bfead34c0d0a38a3b2a5909d7c611ca63df6a455308e395cd98140",
+		"README.md": "e0d33ed753836e1a6ad6f242501c4217f52f4cf68d374dc112b55d35b71a3ac2",
 		"config/config.json": {
-			"hash": "f3a8dc83be12d3724ecaac0543806fb7848d95886194f11e965c63f12470ecd6",
+			"hash": "f26b56df5f946cd7fbd1da428937bf3cdbcb3442d34596c5e7abecb44390960a",
 			"overwrite": false
 		},
 		"config/data.json": {
