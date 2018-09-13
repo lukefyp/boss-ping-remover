@@ -11,7 +11,7 @@
 			"overwrite": false
 		},
 		"index.js": "ac55f87638647f06ef88c4bbd5e295ea8e4d5bfdc9d6702d86c03896492e6e3e",
-		"lib/bpr.js": "c6660ad45d715c0c02e9971486ed7838ac6d3a5f387c9720430eb12d2d23eccf",
+		"lib/bpr.js": "aecfc74a8e45a3829ca6d4ac05c290f62f3de9f94baee39c8dd8c1334d247284",
 		"lib/ping.js": "47253aa5de659b562536190d1752518caaf0616d689c01a5ecc3f532dc748171",
 		"module.json": "634e12f2b6b99985126f1d817669a2132489e5ad0828f4dfff8c82f66bd905b7"
 	},
@@ -31,6 +31,6 @@
 		"S_DESPAWN_NPC": 3,
 		"S_LOAD_TOPO": 3,
 		"S_LOGIN": 10,
-		"S_SPAWN_NPC": [8,9]
+		"S_SPAWN_NPC": 9
 	}
 }
