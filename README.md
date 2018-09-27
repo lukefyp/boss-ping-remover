@@ -7,11 +7,12 @@ Makes the bosses attacks match up with servers
 * `BPR debug` -- Enable/Disable the debug output
 
 ### Config:
+
+Make the following changes to `config/config.json` if **_either_** of the following are true:
+
 * If you have high ping (200+ ms) 
 
-* if you're using skill prediction (or ping compensation, ping remover, class script, etc)
-
-Make the following changes to `config/config.json`:
+* If you're using skill prediction (or ping compensation, ping remover, class script, etc)
 
 ```diff
 {
