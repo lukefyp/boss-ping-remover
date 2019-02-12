@@ -11,8 +11,8 @@
             "overwrite": false
         },
         "index.js": "bb80d7b49c6aa47f389c502e6176d9d930cb3f53b6eecf8a4f474008c7559fe4",
-        "lib/bpr.js": "9e3bec22de1bf95325fd0fa9cb7017273c49060bfe4a62c5fd8071d6f4f34ec2",
-        "lib/ping.js": "4db41b53daa09335aee5f18b6d068a37e17101ff28a3b3d33cfc0fb0e5222fef",
+        "lib/bpr.js": "2c24202eb0c3251f63368cf23687ba24ff0e64863bf1153ca7c29cd67a2e7eaa",
+        "lib/ping.js": "06bcffbe17890f65264b88f7bbe624c235a0e88eeae44720007ad6c332be705f",
         "module.json": "20408d185aa2c425afb791e493eeb06c6ff10d3a7191227e1952c73d7c88fb70"
     },
     "defs": {
