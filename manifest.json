@@ -12,7 +12,7 @@
         },
         "index.js": "bb80d7b49c6aa47f389c502e6176d9d930cb3f53b6eecf8a4f474008c7559fe4",
         "lib/bpr.js": "2c24202eb0c3251f63368cf23687ba24ff0e64863bf1153ca7c29cd67a2e7eaa",
-        "lib/ping.js": "d12db6b2554d828f1bb04eea41be469e9f21eaa789e73c6518d88e0ec60d4a0e",
+        "lib/ping.js": "5af7a105458f35150f54bc2f23bc045bb59ea28fecc3af7a9f93ec93824e9067",
         "module.json": "20408d185aa2c425afb791e493eeb06c6ff10d3a7191227e1952c73d7c88fb70"
     },
     "defs": {
@@ -20,11 +20,11 @@
         "C_CAN_LOCKON_TARGET": 3,
         "C_NOTIMELINE_SKILL": 3,
         "C_REQUEST_GAMESTAT_PING": "raw",
-        "C_START_COMBO_INSTANT_SKILL": 5,
-        "C_START_INSTANCE_SKILL": 6,
+        "C_START_COMBO_INSTANT_SKILL": 6,
+        "C_START_INSTANCE_SKILL": 7,
         "C_START_INSTANCE_SKILL_EX": 5,
         "C_START_SKILL": 7,
-        "C_START_TARGETED_SKILL": 6,
+        "C_START_TARGETED_SKILL": 7,
         "S_ACTION_END": 5,
         "S_ACTION_STAGE": 9,
         "S_CANNOT_START_SKILL": 4,
