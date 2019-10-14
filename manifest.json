@@ -12,7 +12,7 @@
         },
         "index.js": "bb80d7b49c6aa47f389c502e6176d9d930cb3f53b6eecf8a4f474008c7559fe4",
         "lib/bpr.js": "2c24202eb0c3251f63368cf23687ba24ff0e64863bf1153ca7c29cd67a2e7eaa",
-        "lib/ping.js": "5af7a105458f35150f54bc2f23bc045bb59ea28fecc3af7a9f93ec93824e9067",
+        "lib/ping.js": "6613cd607df2afb15b5c073cf69c314368843a8e6f4a850f8be955120d082439",
         "module.json": "20408d185aa2c425afb791e493eeb06c6ff10d3a7191227e1952c73d7c88fb70"
     },
     "defs": {
@@ -30,7 +30,7 @@
         "S_CANNOT_START_SKILL": 4,
         "S_CAN_LOCKON_TARGET": 3,
         "S_LOAD_TOPO": 3,
-        "S_LOGIN": 13,
+        "S_LOGIN": [13,14],
         "S_RESPONSE_GAMESTAT_PONG": "raw",
         "S_SPAWN_NPC": 11
     }
