@@ -13,7 +13,7 @@
         "index.js": "bb80d7b49c6aa47f389c502e6176d9d930cb3f53b6eecf8a4f474008c7559fe4",
         "lib/bpr.js": "b26ec75b3d5759e0ce5375bea7599144fb5a6806447af0c341f703475e31a25a",
         "lib/ping.js": "b213acba295a4ba0f3c1767f532328fadaab682df0fbaa1a28456378956d5d0e",
-        "module.json": "a28d0a073c55dd43a6ca238fc6289276224f924d47ab2967b191e3f77dbd18fe"
+        "module.json": "2fea6c27b6dbb91d2827fdc7c74ec70a0a09dbd33a3ef3eb2690db7922d0e752"
     },
     "defs": {
         "C_CANCEL_SKILL": 3,
