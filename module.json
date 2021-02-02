@@ -1,5 +1,5 @@
 {
-    "disableAutoUpdate": true,
+    "disableAutoUpdate": false,
     "servers": ["https://raw.githubusercontent.com/lukefyp/boss-ping-remover/master/"],
     "name": "boss-ping-remover",
     "author": "lukefyp",
